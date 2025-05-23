@@ -26,7 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/listings/', include('listings.urls')),
     path('api/users/', include('users.urls')),
-    #path('api/reviews/', include('reviews.urls')),
+    path('api/reviews/', include('reviews.urls')),
     path('api/bookings/', include('bookings.urls')),
     # JWT эндпоинты
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
