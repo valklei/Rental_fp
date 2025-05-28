@@ -19,6 +19,9 @@ class ReviewListCreateView(generics.ListCreateAPIView):
 class ReviewDetailView(generics.RetrieveDestroyAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticated]
+    lookup_url_kwarg = 'listing_id'
+    lookup_field = 'listing'
 
     def get_queryset(self):
-        return Review.objects.filter(user=self.request.user) 
+        listing_id = self.kwargs.get('listing_id')
+        return Review.objects.filter(listing=listing_id)

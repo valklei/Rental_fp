@@ -7,18 +7,20 @@ class ListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Listing
         fields = ['id', 'owner', 'title', 'description', 'location', 'price', 'rooms_count', 'room_type', 'is_active', 'created_at']
-        read_only_fields = ['owner', 'is_active', 'created_at']
+        read_only_fields = ['owner', 'created_at']
 
     def create(self, validated_data):
         return Listing.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        print("PUT", "="*30)
         instance.title = validated_data.get('title', instance.title)
         instance.description = validated_data.get('description', instance.description)
         instance.location = validated_data.get('location', instance.location)
         instance.price = validated_data.get('price', instance.price)
         instance.rooms_count = validated_data.get('rooms_count', instance.rooms_count)
         instance.room_type = validated_data.get('room_type', instance.room_type)
+        instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.save()
         return instance
 

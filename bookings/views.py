@@ -1,5 +1,8 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from rest_framework.exceptions import PermissionDenied
+
 from .models import Booking
 from .serializers import BookingSerializer
 
@@ -14,15 +17,28 @@ class BookingListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(tenant=self.request.user)
 
-class BookingDetailView(generics.RetrieveDestroyAPIView):
+class BookingDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BookingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         return Booking.objects.filter(tenant=self.request.user)
 
+    def partial_update(self, request, *args, **kwargs):
+        # print('patch', '==' * 100)
+        instance = self.get_object()
+        user = request.user
+        data = request.data.copy()
+        new_status = data.get('status')
+        instance.status = new_status
+        instance.save()
+        return Response(self.get_serializer(instance).data, status=status.HTTP_200_OK)
+
     def perform_destroy(self, instance):
+        print(instance.can_cancel(), '==' * 100)
         if instance.can_cancel():
             instance.delete()
+        else:
+            raise PermissionDenied("Нельзя отменить бронирование")
 
 # Create your views here.
