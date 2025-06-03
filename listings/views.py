@@ -10,7 +10,7 @@ class ListingListCreateView(generics.ListCreateAPIView):
     serializer_class = ListingSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['location', 'room_type']
+    filterset_fields = ['price', 'location', 'room_type', 'rooms_count']
     search_fields = ['location', 'title', 'description']
     ordering_fields = ['price', 'created_at']
 
