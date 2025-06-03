@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, permissions, filters
 from .models import Listing
 from .serializers import ListingSerializer
@@ -8,7 +9,8 @@ class ListingListCreateView(generics.ListCreateAPIView):
     queryset = Listing.objects.filter(is_active=True)
     serializer_class = ListingSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['location', 'room_type']
     search_fields = ['location', 'title', 'description']
     ordering_fields = ['price', 'created_at']
 

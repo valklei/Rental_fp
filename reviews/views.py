@@ -1,11 +1,16 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, permissions, filters
 from .models import Review
 from .serializers import ReviewSerializer
 
 class ReviewListCreateView(generics.ListCreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['rating']
+    # search_fields = ['location', 'title', 'description']
+    ordering_fields = ['rating']
 
     def get_queryset(self):
         listing_id = self.request.query_params.get('listing')
