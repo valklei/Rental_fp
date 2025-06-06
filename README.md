@@ -10,7 +10,6 @@
 - Django REST Framework
 - MySQL
 - JWT (SimpleJWT)
-- Faker (для генерации тестовых данных)
 - i18n (локализация)
 - Postman
 
